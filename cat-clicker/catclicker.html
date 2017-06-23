@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Cat Clicker</title>
+    <script src="jQuery.js"></script>
+    <link rel="stylesheet" type="text/css" href="cat_clicker.css">
+
+    <!-- Case 1: The following doesn't work as this has a function invocation having an HTML element. We need to load the DOM before any JS which operates on the DOM
+    <script src="cat_clicker.js"></script> -->
+
+    <!-- Case 2: The following works. Even though there is a function invocation, it waits until the DOM is loaded to get compiled. -->
+    <!-- <script>
+        var numClick = 0;
+
+        $(function(){
+            $('#cat1').click(function(e) {
+            numClick++;
+            console.log("No of Click: " + numClick);
+            });
+        });
+    </script> -->
+
+    <!-- Case 4: The JS file only have function declarations but no function invocation involving DOM elements
+    <script src="cat_clicker_js_load_test.js"></script> -->
+</head>
+<body>
+    <div>
+        <p id="cat1Name" name="Cat1"></p>
+        <img id="cat1" src="fav_cat1.jpg">
+        <p id="cat1Desc"></p>
+    </div>
+    <div>
+        <p id="cat2Name" name="Cat2"></p>
+        <img id="cat2" src="fav_cat2.jpg">
+        <p id="cat2Desc"></p>
+    </div>
+    <!-- Case 3: The JS code can be put here to make sure it executes only after the document is loaded. This is probably the best method -->
+    <script src="cat_clicker.js"></script>
+
+    <!-- Case 4: This is part of Case 4 where the actual function invocation involving DOM elements happens
+    <script>
+        obj1.banana();
+    </script> -->
+</body>
+</html>
