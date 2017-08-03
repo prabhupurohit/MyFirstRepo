@@ -1,0 +1,132 @@
+FilterModule1:
+--------------
+
+Sub Fill_User_Role()
+
+    Dim vbDQ As String
+    vbDQ = """"
+    
+    'Max number of roles that can be define
+    Dim maxRole As Integer
+    maxRole = 5
+    
+    'get the total number of rows in the rules
+    Dim lastRow As Long
+    lastRow = Worksheets("u1sheet").Range("A" & Rows.Count).End(xlUp).row
+    MsgBox lastRow
+    
+    'fill the arrays with the rules values
+    'Define a variable array
+    ReDim DataArray(maxRole - 1, 1) As String
+    For i = 0 To lastRow - 1 Step 1
+      aRange = "A" & (i + 1) & ":" & "A" & (i + 1)
+      DataArray(i, 0) = Worksheets("u1sheet").Range(aRange).Value
+      'MsgBox "The value of i is : " & DataArray(i, 0)
+    Next
+    
+    For j = 0 To lastRow - 1 Step 1
+      bRange = "B" & (j + 1) & ":" & "B" & (j + 1)
+      DataArray(j, 1) = Worksheets("u1sheet").Range(bRange).Value
+      'MsgBox "The value of j is : " & DataArray(j, 1)
+    Next
+    
+    'get all the filter values
+    ReDim resultArray(maxRole - 1) As String
+    Dim userId As String
+    userId = UserForm1.txtUser.Text
+    
+    Dim m As Integer
+    m = 0
+    For k = 0 To (maxRole - 1) Step 1
+        If (userId = DataArray(k, 0)) Then
+           resultArray(m) = DataArray(k, 1)
+           m = m + 1
+        End If
+    Next
+        
+    'get max rows for second sheet
+    lastRow2 = Worksheets("u2sheet").Range("A" & Rows.Count).End(xlUp).row
+    
+    'do filtering if the user is not admin
+    If (userId <> "admin") Then
+        Dim rowFirst, colFirst, rowLast, colLast As Integer
+        rowFirst = 1
+        rowLast = lastRow2
+        colFirst = 1
+        colLast = 3
+        If Sheets("u2sheet").ProtectContents = True Then
+            Sheets("u2sheet").Unprotect ("admin")
+        End If
+        Sheets("u2sheet").Activate
+        If ActiveSheet.FilterMode Then
+            ActiveSheet.ShowAllData
+        End If
+        Sheets("u2sheet").Range(Cells(rowFirst, colFirst), Cells(rowLast, colLast)).AutoFilter Field:=3, Criteria1:=resultArray, Operator:=xlFilterValues
+        Sheets("u2sheet").Protect ("admin")
+    Else
+        Sheets("u1sheet").Visible = True
+        Sheets("u1sheet").Unprotect ("admin")
+        Sheets("u2sheet").Unprotect ("admin")
+    End If
+    
+End Sub
+
+
+This Workbook:
+--------------
+Private Sub Workbook_Open()
+    If Sheets("u1sheet").Visible Then
+        Sheets("u1sheet").Protect ("admin")
+        Sheets("u1sheet").Visible = False
+    End If
+    UserForm1.Show
+End Sub
+
+'Add close event
+'If the u1sheet is open, then hide it
+Private Sub Workbook_BeforeClose()
+     If Sheets("u1sheet").Visible Then
+        Sheets("u1sheet").Protect ("admin")
+        Sheets("u1sheet").Visible = False
+     End If
+End Sub
+
+UserForm1:
+----------
+Private Sub btnOK_Click()
+
+    Dim maxUser As Integer
+    maxUser = 10
+    
+    ReDim uniqueString(maxUser) As String
+    
+    lr = Sheets("u1sheet").Cells(Sheets("u1sheet").Rows.Count, 1).End(xlUp).row
+    Set range1 = Sheets("u1sheet").Range("A2:A" & lr)
+    Dim cnt As Integer
+    cnt = 0
+    For Each cel In range1
+       If Not InStr(output, cel.Value) > 0 Then
+           uniqueString(cnt) = cel.Value
+           cnt = cnt + 1
+       End If
+    Next
+
+    If Len(txtUser.Text) > 0 Then
+        If (UBound(Filter(uniqueString, txtUser.Text)) > -1) Or (txtUser.Text = "admin") Then
+            FilterModule1.Fill_User_Role
+            Unload UserForm1
+        Else
+            MsgBox "Invalid User"
+        End If
+    Else
+        MsgBox "Please enter a User Name to proceed"
+    End If
+
+End Sub
+
+'Private Sub UserForm_Terminate()
+    'ActiveWorkbook.Close (False)
+'End Sub
+Private Sub UserForm_Click()
+
+End Sub
