@@ -6,13 +6,7 @@
   "description": "This website is personal resume management",
   "main": "index.html",
   "keywords": [
-    "efs",
-    "external",
-    "website",
-    "press",
-    "release",
-    "content",
-    "posting"
+    "resume"
   ],
   "license": "PCP innovation",
   "homepage": "http://pcp.inovation.com/",
@@ -26,11 +20,6 @@
   ],
   "dependencies": {
     "jquery": "2",
-    "bootstrap": "3",
-    "dustjs-linkedin": "^2.7.5",
-    "dustjs-helpers": "^1.7.3",
-    "blockUI": "blockui#*",
-    "ckeditor": "^4.7.1",
-    "jquery-form-validator": "^2.3.74"
+    "bootstrap": "3"
   }
 }
