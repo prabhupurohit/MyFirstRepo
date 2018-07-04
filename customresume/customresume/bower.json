@@ -1,0 +1,25 @@
+{
+  "name": "customresume",
+  "authors": [
+    "Prabhu Purohit"
+  ],
+  "description": "This website is personal resume management",
+  "main": "index.html",
+  "keywords": [
+    "resume"
+  ],
+  "license": "PCP innovation",
+  "homepage": "http://pcp.inovation.com/",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "2",
+    "bootstrap": "3"
+  }
+}
